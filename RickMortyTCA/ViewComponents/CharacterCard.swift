@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-//import ComposableArchitecture
 
 struct CharacterCard: View {
 
@@ -42,12 +41,13 @@ struct CharacterCard: View {
                 .padding(.horizontal, 10.0)
 
             RoundedRectangle(cornerRadius: 10.0)
-                .foregroundStyle(.white)
+                .foregroundStyle(.black)
                 .frame(maxHeight: 30.0)
                 .overlay {
                     Text(name)
                         .fontWeight(.bold)
-//                        .foregroundStyle(Color.black)
+                        .foregroundStyle(Color.white)
+                        .padding(.horizontal, 4)
                 }
         }
         .overlay(alignment: .topTrailing) {
@@ -79,16 +79,6 @@ struct CharacterCard: View {
         }
     }
 }
-
-//#Preview {
-//    CharacterCard(
-//        store: Store(
-//            initialState: CharactersReducer.State()
-//        ){
-//            CharactersReducer()
-//        }
-//    )
-//}
 
 #Preview {
     CharacterCard(imageURL: "https://rickandmortyapi.com/api/character/avatar/361.jpeg", name: "Rick", isFavorite: true)
