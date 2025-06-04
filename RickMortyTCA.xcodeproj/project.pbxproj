@@ -80,11 +80,11 @@
 		E66E22632DEDE8B20092CEED = {
 			isa = PBXGroup;
 			children = (
+				E66E22BC2DEE09FA0092CEED /* Frameworks */,
+				E66E226D2DEDE8B20092CEED /* Products */,
 				E66E226E2DEDE8B20092CEED /* RickMortyTCA */,
 				E66E227D2DEDE8B30092CEED /* RickMortyTCATests */,
 				E66E22872DEDE8B30092CEED /* RickMortyTCAUITests */,
-				E66E22BC2DEE09FA0092CEED /* Frameworks */,
-				E66E226D2DEDE8B20092CEED /* Products */,
 			);
 			sourceTree = "<group>";
 		};

@@ -168,18 +168,12 @@ struct CharacterDetailsView: View {
             store.send(.favoriteButtonTapped)
         } label: {
             Image(systemName: store.isFavorite ? "heart.fill" : "heart")
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(store.isFavorite ? .white : .red)
-                .frame(width: 32, height: 32)
-                .background(store.isFavorite ? Color.red : Color.black.opacity(0.6))
-                .clipShape(Circle())
-                .background(
-                    Circle()
-                        .fill(.ultraThinMaterial)
-                        .environment(\.colorScheme, .dark)
-                )
+                .font(.title2)
+                .padding(10.0)
+                .clipShape(.rect(cornerRadius: 10.0))
         }
-        .scaleEffect(store.isFavorite ? 1.1 : 1.0)
+        .foregroundStyle(Color.green)
+        .scaleEffect(store.isFavorite ? 1.3 : 1.0)
         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: store.isFavorite)
     }
     

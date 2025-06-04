@@ -12,8 +12,8 @@ struct CharactersListView: View {
     @Perception.Bindable var store: StoreOf<CharactersListReducer>
     
     private let gridColumns = [
-        GridItem(.adaptive(minimum: 150.0, maximum: 300.0), spacing: 2),
-        GridItem(.adaptive(minimum: 150.0, maximum: 300.0), spacing: 2)
+        GridItem(.adaptive(minimum: 150.0, maximum: 200.0), spacing: 32),
+        GridItem(.adaptive(minimum: 150.0, maximum: 200.0), spacing: 32)
     ]
     
     var body: some View {
@@ -41,9 +41,24 @@ struct CharactersListView: View {
     
     private var charactersListContent: some View {
         VStack(spacing: 0) {
+            navigationHeader
             searchField
             charactersGrid
         }
+    }
+    
+    // MARK: - Navigation Header
+    private var navigationHeader: some View {
+        HStack {
+            Text("Rick & Morty")
+                .font(.system(size: 28, weight: .bold, design: .rounded))
+                .foregroundColor(.primary)
+            Spacer()
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 8)
+        .padding(.bottom, 12)
+        .background(.ultraThinMaterial)
     }
     
     private var charactersGrid: some View {
@@ -160,6 +175,15 @@ struct CharactersListView: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 40)
+            
+            // Feature highlights
+            VStack(spacing: 12) {
+                FeatureRow(icon: "magnifyingglass", title: "Search Characters", description: "Find your favorite characters")
+                FeatureRow(icon: "heart", title: "Save Favorites", description: "Keep track of characters you love")
+                FeatureRow(icon: "tv", title: "Episode Details", description: "Explore character appearances")
+            }
+            .padding(.vertical)
+            .padding(.horizontal, 40)
         }
     }
     
