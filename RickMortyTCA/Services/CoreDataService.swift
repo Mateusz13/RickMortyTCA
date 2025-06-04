@@ -110,13 +110,13 @@ final class CoreDataService: ObservableObject {
 }
 
 // MARK: - Favorites Dependency
-private enum FavoritesDependency: DependencyKey {
+private enum CoreDataServiceKey: DependencyKey {
     static let liveValue = CoreDataService(coreDataStack: .shared)
 }
 
 extension DependencyValues {
     var coreDataService: CoreDataService {
-        get { self[FavoritesDependency.self] }
-        set { self[FavoritesDependency.self] = newValue }
+        get { self[CoreDataServiceKey.self] }
+        set { self[CoreDataServiceKey.self] = newValue }
     }
 }

@@ -30,6 +30,9 @@ struct CharactersListView: View {
                     }
                     toggleButton
                 }
+                .onAppear {
+                    store.send(.favoritesDataUpdated)
+                }
                 .alert($store.scope(state: \.alert, action: \.alert))
             }
         }

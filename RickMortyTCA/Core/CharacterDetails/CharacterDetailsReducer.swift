@@ -16,10 +16,15 @@ struct CharacterDetailsReducer {
         let character: Character
         var isFavorite: Bool
     }
+    
+    @Dependency(\.coreDataService) var favoriteRepository
 
     enum Action {
         case errorOccurred(NetworkServiceErrors)
         case alert(PresentationAction<Alert>)
+        
+        case favoriteButtonTapped
+        case favoriteUpdated(Bool)
         
         enum Alert {
             case cancelButtonTapped
@@ -29,6 +34,28 @@ struct CharacterDetailsReducer {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+                
+            case .favoriteButtonTapped:
+                let characterID = state.character.id
+                let currentlyFavorite = state.isFavorite
+
+                return .run { send in
+                    do {
+                        if currentlyFavorite {
+                            try await self.favoriteRepository.removeFavorite(id: characterID)
+                        } else {
+                            try await self.favoriteRepository.addFavorite(id: characterID)
+                        }
+                        //Toggle only after success
+                        await send(.favoriteUpdated(!currentlyFavorite))
+                    } catch {
+                        await send(.errorOccurred(.invalidData))
+                    }
+                }
+
+            case .favoriteUpdated(let newValue):
+                state.isFavorite = newValue
+                return .none
 
             case .errorOccurred(let error):
                 state.alert = AlertState {

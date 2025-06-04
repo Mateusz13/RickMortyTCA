@@ -24,6 +24,8 @@ struct CharactersListReducer {
             showCharactersList && !characters.isEmpty
         }
     }
+    
+    @Dependency(\.coreDataService) var favoriteRepository
 
     enum Action: Equatable, BindableAction {
         case alert(PresentationAction<Alert>)
@@ -34,6 +36,7 @@ struct CharactersListReducer {
         case searchTriggered
         case searchCleared
         case binding(BindingAction<State>)
+        case favoritesDataUpdated
 
         @CasePathable
         enum Alert: Equatable {
@@ -80,6 +83,7 @@ struct CharactersListReducer {
                 
             case .charactersLoaded(let response):
                 response.forEach { state.characters.append($0) }
+                state.favoritesID = self.favoriteRepository.favoritesList
                 return .none
 
             case .reachedBottomOnList:
@@ -99,6 +103,10 @@ struct CharactersListReducer {
                     await send(.errorOccurred(error as? NetworkServiceErrors ?? .invalidData))
                 }
                 .cancellable(id: CancelID.loadMoreCharacters)
+                
+            case .favoritesDataUpdated:
+                state.favoritesID = self.favoriteRepository.favoritesList
+                return .none
 
             case .alert(.presented(.dismiss)):
                 state.alert = nil

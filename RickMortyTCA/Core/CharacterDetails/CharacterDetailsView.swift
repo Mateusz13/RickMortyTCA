@@ -152,6 +152,7 @@ struct CharacterDetailsView: View {
     // MARK: - Favorite Button
     private var favoriteButton: some View {
         Button {
+            store.send(.favoriteButtonTapped)
         } label: {
             Image(systemName: store.isFavorite ? "heart.fill" : "heart")
                 .font(.system(size: 16, weight: .semibold))
