@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E66E22BE2DEE09FA0092CEED /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E66E22BD2DEE09FA0092CEED /* ComposableArchitecture */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		E66E227B2DEDE8B30092CEED /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E66E22BE2DEE09FA0092CEED /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,10 +80,11 @@
 		E66E22632DEDE8B20092CEED = {
 			isa = PBXGroup;
 			children = (
+				E66E22BC2DEE09FA0092CEED /* Frameworks */,
+				E66E226D2DEDE8B20092CEED /* Products */,
 				E66E226E2DEDE8B20092CEED /* RickMortyTCA */,
 				E66E227D2DEDE8B30092CEED /* RickMortyTCATests */,
 				E66E22872DEDE8B30092CEED /* RickMortyTCAUITests */,
-				E66E226D2DEDE8B20092CEED /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -90,6 +96,13 @@
 				E66E22842DEDE8B30092CEED /* RickMortyTCAUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E66E22BC2DEE09FA0092CEED /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +125,7 @@
 			);
 			name = RickMortyTCA;
 			packageProductDependencies = (
+				E66E22BD2DEE09FA0092CEED /* ComposableArchitecture */,
 			);
 			productName = RickMortyTCA;
 			productReference = E66E226C2DEDE8B20092CEED /* RickMortyTCA.app */;
@@ -410,7 +424,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
@@ -449,7 +463,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
@@ -607,6 +621,14 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E66E22BD2DEE09FA0092CEED /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E66E22972DEDE9110092CEED /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E66E22642DEDE8B20092CEED /* Project object */;
 }
