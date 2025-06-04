@@ -55,7 +55,7 @@ struct CharacterCard: View {
                 Image(systemName: "heart.fill")
                     .resizable()
                     .frame(width: 30.0, height: 30.0)
-                    .foregroundStyle(Color.red)
+                    .foregroundStyle(Color.green)
                     .padding(10.0)
 //                    .background(Color.black.clipShape(Circle()))
                     .offset(x: 10.0, y: -10.0)

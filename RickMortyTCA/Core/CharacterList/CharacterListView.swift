@@ -52,8 +52,10 @@ struct CharactersListView: View {
             }
             .padding()
         }
-        .task(id: store.searchText) {
-            await handleSearchDebounce()
+        .onChange(of: store.searchText) { _ in
+            Task {
+                await handleSearchDebounce()
+            }
         }
     }
     

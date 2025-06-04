@@ -114,7 +114,7 @@ struct CharactersListReducer {
                         TextState("OK")
                     }
                 } message: {
-                    TextState(error.errorDescription ?? "An unexpected error occurred. Please try again.")  // ✅ IMPROVED: Better error message
+                    TextState(error.errorDescription ?? "An unexpected error occurred. Please try again.")
                 }
                 return .none
                 
@@ -148,6 +148,7 @@ struct CharactersListReducer {
             }
         }
         .ifLet(\.$alert, action: \.alert)
+        ._printChanges()
     }
 }
 
