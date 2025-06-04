@@ -34,37 +34,13 @@ struct EpisodeDetailsView: View {
         }
     }
     
-    // MARK: - Header Section
     private var headerSection: some View {
-        VStack(spacing: 16) {
-            VStack(spacing: 12) {
-                RoundedRectangle(cornerRadius: 2.5)
-                    .fill(Color(UIColor.systemGray3))
-                    .frame(width: 36, height: 5)
-                    .padding(.top, 8)
-                
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Episode Details")
-                            .font(.system(size: 20, weight: .bold, design: .rounded))
-                            .foregroundColor(.primary)
-                        
-                        Text(store.episode.episode)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    Spacer()
-                    
-                    closeButton
-                }
-                .padding(.horizontal, 20)
-            }
-            
-            Divider()
-                .background(Color(UIColor.separator))
+        HStack {
+            Spacer()
+            closeButton
         }
-        .background(.ultraThinMaterial)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 15)
     }
     
     // MARK: - Episode Info Card
@@ -155,7 +131,7 @@ struct EpisodeDetailsView: View {
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundColor(.secondary)
                 .frame(width: 30, height: 30)
-                .background(Color(UIColor.tertiarySystemGroupedBackground))
+                .background(Color.gray.opacity(0.5))
                 .clipShape(Circle())
         }
         .buttonStyle(.plain)
