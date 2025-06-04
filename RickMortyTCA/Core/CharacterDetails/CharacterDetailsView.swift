@@ -25,6 +25,9 @@ struct CharacterDetailsView: View {
                     .padding(.bottom, 20)
                 }
                 .background(Color(UIColor.systemGroupedBackground))
+                .sheet(isPresented: $store.episodeDetailsIsPresented.sending(\.presentEpisodeDetails)) {
+                    episodeDetailsSheet
+                }
             }
             .alert($store.scope(state: \.alert, action: \.alert))
             .toolbar {
@@ -120,6 +123,7 @@ struct CharacterDetailsView: View {
             ], spacing: 12) {
                 ForEach(store.character.episode, id: \.self) { episodeURL in
                     EpisodeCard(episodeNumber: episodeURL.mapEpisodeURLToNumber()) {
+                        store.send(.episodeTapped(episode: episodeURL))
                     }
                 }
             }
@@ -128,6 +132,15 @@ struct CharacterDetailsView: View {
         .background(Color(UIColor.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+    }
+    
+    // MARK: - Episode Details Sheet
+    @ViewBuilder
+    private var episodeDetailsSheet: some View {
+        if let episodeStore = store.scope(state: \.episodeDetails, action: \.episodeDetails) {
+            EpisodeDetailsView(store: episodeStore)
+                .ignoresSafeArea()
+        }
     }
     
     // MARK: - Back Button
