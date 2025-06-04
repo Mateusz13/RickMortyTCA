@@ -11,7 +11,8 @@ import ComposableArchitecture
 @Reducer
 struct CharactersListReducer {
     @ObservableState
-    struct State: Equatable {
+    struct State {
+        var characterDetails: CharacterDetailsReducer.State?
         @Presents var alert: AlertState<Action.Alert>?
         var favoritesID = Set<Int>()
         var characters: IdentifiedArrayOf<Character> = []

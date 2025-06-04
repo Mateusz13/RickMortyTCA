@@ -72,9 +72,9 @@ struct CharacterCard: View {
             case .success(let image):
                 image.resizable()
             case .failure:
-                Color.red
+                Color.gray
             default:
-                Color.red
+                Color.gray
             }
         }
     }

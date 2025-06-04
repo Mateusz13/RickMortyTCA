@@ -62,7 +62,7 @@ struct CharactersListView: View {
     private func characterRow(for character: Character) -> some View {
 
             NavigationLink {
-                
+                characterDetailsView(for: character)
             } label: {
                 CharacterCard(
                     imageURL: character.image,
@@ -77,7 +77,22 @@ struct CharactersListView: View {
             }
             .buttonStyle(.plain)
     }
-    
+
+    //Character details view
+    private func characterDetailsView(for character: Character) -> some View {
+        CharacterDetailsView(
+            store: Store(
+                initialState: CharacterDetailsReducer.State(
+                    character: character,
+                    isFavorite: store.favoritesID.contains(character.id)
+                ),
+                reducer: {
+                    CharacterDetailsReducer()
+                }
+            )
+        )
+    }
+
     //Search debounce logic
     private func handleSearchDebounce() async {
         do {
