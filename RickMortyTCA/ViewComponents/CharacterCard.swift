@@ -41,7 +41,6 @@ struct CharacterCard: View {
                 .overlay {
                     Text(name)
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(.primary)
                         .lineLimit(2)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 8)

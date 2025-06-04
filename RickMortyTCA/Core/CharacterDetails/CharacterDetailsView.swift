@@ -64,7 +64,6 @@ struct CharacterDetailsView: View {
             
             Text(store.character.name)
                 .font(.system(size: 28, weight: .bold, design: .rounded))
-                .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 16)
         }
@@ -77,7 +76,6 @@ struct CharacterDetailsView: View {
             HStack {
                 Text("Character Info")
                     .font(.headline)
-                    .foregroundColor(.primary)
                 Spacer()
             }
             
@@ -103,8 +101,7 @@ struct CharacterDetailsView: View {
             HStack {
                 Text("Episodes")
                     .font(.headline)
-                    .foregroundColor(.primary)
-                
+        
                 Spacer()
                 
                 Text("\(store.character.episode.count)")
@@ -231,7 +228,6 @@ struct EpisodeCard: View {
                 
                 Text(episodeNumber)
                     .font(.system(size: 16, weight: .bold, design: .rounded))
-                    .foregroundColor(.primary)
             }
             .frame(maxWidth: .infinity)
             .frame(height: 60)

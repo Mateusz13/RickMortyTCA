@@ -23,7 +23,6 @@ struct FeatureRow: View {
                 Text(title)
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundColor(.primary)
                 
                 Text(description)
                     .font(.caption)

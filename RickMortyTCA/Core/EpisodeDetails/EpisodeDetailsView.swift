@@ -50,7 +50,6 @@ struct EpisodeDetailsView: View {
             VStack(spacing: 8) {
                 Text(store.episode.name)
                     .font(.system(size: 24, weight: .bold, design: .rounded))
-                    .foregroundColor(.primary)
                     .multilineTextAlignment(.center)
                     .lineLimit(nil)
                 
@@ -99,7 +98,6 @@ struct EpisodeDetailsView: View {
                 
                 Text("Characters")
                     .font(.headline)
-                    .foregroundColor(.primary)
                 
                 Spacer()
                 
@@ -164,7 +162,6 @@ struct DetailCard: View {
                 
                 Text(value)
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.primary)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)

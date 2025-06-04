@@ -52,7 +52,6 @@ struct CharactersListView: View {
         HStack {
             Text("Rick & Morty")
                 .font(.system(size: 28, weight: .bold, design: .rounded))
-                .foregroundColor(.primary)
             Spacer()
         }
         .padding(.horizontal, 20)
@@ -128,7 +127,6 @@ struct CharactersListView: View {
         
             TextField("Search characters...", text: $store.searchText)
                 .font(.system(size: 16, weight: .medium))
-                .foregroundColor(.primary)
             
             if !store.searchText.isEmpty {
                 Button {
