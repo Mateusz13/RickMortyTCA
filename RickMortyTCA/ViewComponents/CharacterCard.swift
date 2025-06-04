@@ -87,21 +87,13 @@ struct CharacterCard: View {
 }
 
 #Preview {
-    HStack(spacing: 16) {
+
         CharacterCard(
             imageURL: "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
             name: "Rick Sanchez",
             isFavorite: true
         )
-        .frame(width: 150)
-        
-        CharacterCard(
-            imageURL: "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
-            name: "Morty Smith",
-            isFavorite: false
-        )
-        .frame(width: 150)
-    }
-    .padding()
-    .background(Color(UIColor.systemGroupedBackground))
+        .frame(width: 160, height: 200)
+        .padding()
+        .background(Color(UIColor.systemGroupedBackground))
 }
