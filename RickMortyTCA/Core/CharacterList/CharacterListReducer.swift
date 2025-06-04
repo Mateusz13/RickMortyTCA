@@ -19,7 +19,6 @@ struct CharactersListReducer {
         var showCharactersList = false
         var page = 1
         var searchText = ""
-        
         var shouldAllowPagination: Bool {
             showCharactersList && !characters.isEmpty
         }
@@ -137,7 +136,7 @@ struct CharactersListReducer {
             case .searchTriggered:
                 let searchText = state.searchText
                 
-                // Reset strony przy nowym wyszukiwaniu
+                // Page reset on new search
                 state.page = 1
                 state.characters.removeAll()
                 
