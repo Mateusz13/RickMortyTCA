@@ -20,7 +20,7 @@ struct CharacterDetailsReducer {
         var episodeDetailsIsPresented = false
     }
     
-    @Dependency(\.coreDataService) var favoriteRepository
+    @Dependency(\.coreDataClient) var favoriteRepository
 
     enum Action {
         
@@ -86,9 +86,9 @@ struct CharacterDetailsReducer {
                 return .run { send in
                     do {
                         if currentlyFavorite {
-                            try await self.favoriteRepository.removeFavorite(id: characterID)
+                            try await self.favoriteRepository.removeFavorite(characterID)
                         } else {
-                            try await self.favoriteRepository.addFavorite(id: characterID)
+                            try await self.favoriteRepository.addFavorite(characterID)
                         }
                         //Toggle only after success
                         await send(.favoriteUpdated(!currentlyFavorite))

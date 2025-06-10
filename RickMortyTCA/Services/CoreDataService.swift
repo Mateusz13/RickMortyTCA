@@ -9,114 +9,82 @@ import Foundation
 import CoreData
 import Dependencies
 
-final class CoreDataService: ObservableObject {
-    
-    private let coreDataStack: CoreDataStack
-    
-    @Published private(set) var favoritesList = Set<Int>()
-    
-    // MARK: - Initialization
-    init(coreDataStack: CoreDataStack = .shared) {
-        self.coreDataStack = coreDataStack
-        Task {
-            await loadFavorites()
-        }
-    }
-    
-    // MARK: - Public Methods
-    func addFavorite(id: Int) async throws {
-        try await withCheckedThrowingContinuation { continuation in
-            let backgroundContext = coreDataStack.backgroundContext()
-            
-            backgroundContext.perform {
-                do {
-                    // Check if already exists
-                    let fetchRequest: NSFetchRequest<FavoriteCharacter> = FavoriteCharacter.fetchRequest()
-                    fetchRequest.predicate = NSPredicate(format: "characterID == %d", id)
-                    
-                    let existingFavorites = try backgroundContext.fetch(fetchRequest)
-                    
-                    if existingFavorites.isEmpty {
-                        // Create new favorite
-                        let favorite = FavoriteCharacter(context: backgroundContext)
-                        favorite.characterID = Int32(id)
-                        
-                        try backgroundContext.save()
-                        
-                        // Update on main thread
-                        Task { @MainActor in
-                            self.favoritesList.insert(id)
-                        }
-                    }
-                    
-                    continuation.resume()
-                } catch {
-                    continuation.resume(throwing: CoreDataError.saveFailed(error.localizedDescription))
-                }
-            }
-        }
-    }
-    
-    func removeFavorite(id: Int) async throws {
-        try await withCheckedThrowingContinuation { continuation in
-            let backgroundContext = coreDataStack.backgroundContext()
-            
-            backgroundContext.perform {
-                do {
-                    let fetchRequest: NSFetchRequest<FavoriteCharacter> = FavoriteCharacter.fetchRequest()
-                    fetchRequest.predicate = NSPredicate(format: "characterID == %d", id)
-                    
-                    let favoritesToDelete = try backgroundContext.fetch(fetchRequest)
-                    
-                    for favorite in favoritesToDelete {
-                        backgroundContext.delete(favorite)
-                    }
-                    
-                    try backgroundContext.save()
-                    
-                    // Update on main thread
-                    Task { @MainActor in
-                        self.favoritesList.remove(id)
-                    }
-                    
-                    continuation.resume()
-                } catch {
-                    continuation.resume(throwing: CoreDataError.deleteFailed(error.localizedDescription))
-                }
-            }
-        }
-    }
-    
-    // MARK: - Private Methods
-    private func loadFavorites() async {
-        do {
-            let context = coreDataStack.context
-            let fetchRequest: NSFetchRequest<FavoriteCharacter> = FavoriteCharacter.fetchRequest()
-            
-            let favorites = try context.fetch(fetchRequest)
-            let favoriteIDs = Set(favorites.map { Int($0.characterID) })
-            
-            Task { @MainActor in
-                self.favoritesList = favoriteIDs
-            }
-        } catch {
-            print("Failed to load favorites: \(error)")
-            // Fallback to empty set
-            Task { @MainActor in
-                self.favoritesList = Set<Int>()
-            }
-        }
-    }
+struct CoreDataClient {
+    var favoritesList: @Sendable () -> Set<Int>
+    var addFavorite: @Sendable (Int) async throws -> Void
+    var removeFavorite: @Sendable (Int) async throws -> Void
 }
 
-// MARK: - Favorites Dependency
-private enum CoreDataServiceKey: DependencyKey {
-    static let liveValue = CoreDataService(coreDataStack: .shared)
+extension CoreDataClient: DependencyKey {
+    static var liveValue: Self {
+        let coreDataStack = CoreDataStack.shared
+        
+        return CoreDataClient(
+            favoritesList: {
+                let context = coreDataStack.context
+                let fetchRequest: NSFetchRequest<FavoriteCharacter> = FavoriteCharacter.fetchRequest()
+                
+                do {
+                    let favorites = try context.fetch(fetchRequest)
+                    return Set(favorites.map { Int($0.characterID) })
+                } catch {
+                    print("Failed to load favorites: \(error)")
+                    return Set<Int>()
+                }
+            },
+            
+            addFavorite: { id in
+                let backgroundContext = coreDataStack.backgroundContext()
+                
+                try await withCheckedThrowingContinuation { continuation in
+                    backgroundContext.perform {
+                        do {
+                            let fetchRequest: NSFetchRequest<FavoriteCharacter> = FavoriteCharacter.fetchRequest()
+                            fetchRequest.predicate = NSPredicate(format: "characterID == %d", id)
+                            
+                            let existingFavorites = try backgroundContext.fetch(fetchRequest)
+                            
+                            if existingFavorites.isEmpty {
+                                let favorite = FavoriteCharacter(context: backgroundContext)
+                                favorite.characterID = Int32(id)
+                                try backgroundContext.save()
+                            }
+                            
+                            continuation.resume()
+                        } catch {
+                            continuation.resume(throwing: CoreDataError.saveFailed(error.localizedDescription))
+                        }
+                    }
+                }
+            },
+            
+            removeFavorite: { id in
+                let backgroundContext = coreDataStack.backgroundContext()
+                
+                try await withCheckedThrowingContinuation { continuation in
+                    backgroundContext.perform {
+                        do {
+                            let fetchRequest: NSFetchRequest<FavoriteCharacter> = FavoriteCharacter.fetchRequest()
+                            fetchRequest.predicate = NSPredicate(format: "characterID == %d", id)
+                            
+                            let favoritesToDelete = try backgroundContext.fetch(fetchRequest)
+                            favoritesToDelete.forEach { backgroundContext.delete($0) }
+                            
+                            try backgroundContext.save()
+                            continuation.resume()
+                        } catch {
+                            continuation.resume(throwing: CoreDataError.deleteFailed(error.localizedDescription))
+                        }
+                    }
+                }
+            }
+        )
+    }
 }
 
 extension DependencyValues {
-    var coreDataService: CoreDataService {
-        get { self[CoreDataServiceKey.self] }
-        set { self[CoreDataServiceKey.self] = newValue }
+    var coreDataClient: CoreDataClient {
+        get { self[CoreDataClient.self] }
+        set { self[CoreDataClient.self] = newValue }
     }
 }

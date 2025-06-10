@@ -24,7 +24,7 @@ struct CharactersListReducer {
         }
     }
     
-    @Dependency(\.coreDataService) var favoriteRepository
+    @Dependency(\.coreDataClient) var favoriteRepository
 
     enum Action: Equatable, BindableAction {
         case alert(PresentationAction<Alert>)
@@ -82,7 +82,7 @@ struct CharactersListReducer {
                 
             case .charactersLoaded(let response):
                 response.forEach { state.characters.append($0) }
-                state.favoritesID = self.favoriteRepository.favoritesList
+                state.favoritesID = self.favoriteRepository.favoritesList()
                 return .none
 
             case .reachedBottomOnList:
@@ -104,7 +104,7 @@ struct CharactersListReducer {
                 .cancellable(id: CancelID.loadMoreCharacters)
                 
             case .favoritesDataUpdated:
-                state.favoritesID = self.favoriteRepository.favoritesList
+                state.favoritesID = self.favoriteRepository.favoritesList()
                 return .none
 
             case .alert(.presented(.dismiss)):
