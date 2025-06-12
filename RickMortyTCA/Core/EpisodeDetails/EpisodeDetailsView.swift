@@ -10,25 +10,24 @@ import ComposableArchitecture
 
 struct EpisodeDetailsView: View {
     var store: StoreOf<EpisodeDetailsReducer>
+    @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                headerSection
-                // Content Section
-                ScrollView {
-                    VStack(spacing: 24) {
-                        episodeInfoCard
-                        characterCountCard
-                        Spacer(minLength: 20)
+        WithPerceptionTracking {
+                VStack(spacing: 0) {
+                    headerSection
+                    // Content Section
+                    ScrollView {
+                        VStack(spacing: 24) {
+                            episodeInfoCard
+                            characterCountCard
+                            Spacer(minLength: 20)
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 24)
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 24)
                 }
                 .background(Color(UIColor.systemGroupedBackground))
-            }
-            .background(Color(UIColor.systemGroupedBackground))
-            .navigationBarHidden(true)
         }
     }
     
@@ -121,7 +120,7 @@ struct EpisodeDetailsView: View {
     // MARK: - Close Button
     private var closeButton: some View {
         Button {
-            store.send(.closeButtonTapped)
+            dismiss()
         } label: {
             Image(systemName: "xmark")
                 .font(.system(size: 14, weight: .semibold))

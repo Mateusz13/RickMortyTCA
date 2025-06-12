@@ -13,28 +13,25 @@ struct CharacterDetailsReducer {
     @ObservableState
     struct State {
         @Presents var alert: AlertState<Action.Alert>?
-        var episodeDetails: EpisodeDetailsReducer.State?
+        @Presents var episodeDetails: EpisodeDetailsReducer.State?
         let character: Character
         var episode: Episode?
         var isFavorite: Bool
-        var episodeDetailsIsPresented = false
     }
     
     @Dependency(\.coreDataClient) var favoriteRepository
 
     enum Action {
-        
-        case episodeDetails(EpisodeDetailsReducer.Action)
-        case presentEpisodeDetails(isPresented: Bool)
-        
         case episodeTapped(episode: String)
-        case episodeLoaded(episode: Episode)
         
         case errorOccurred(NetworkServiceErrors)
         case alert(PresentationAction<Alert>)
         
         case favoriteButtonTapped
         case favoriteUpdated(Bool)
+        
+        case navigateToEpisodeDetails(Episode)
+        case episodeDetails(PresentationAction<EpisodeDetailsReducer.Action>)
         
         enum Alert {
             case cancelButtonTapped
@@ -44,40 +41,24 @@ struct CharacterDetailsReducer {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .episodeDetails(.closeButtonTapped):
-                return .run { send in
-                    await send(.presentEpisodeDetails(isPresented: false))
-                }
-
-            case .presentEpisodeDetails(isPresented: true):
-                guard let episode = state.episode else { return .none }
-                state.episodeDetails = EpisodeDetailsReducer.State(episode: episode)
-                state.episodeDetailsIsPresented = true
-                return .none
-
-            case .presentEpisodeDetails(isPresented: false):
-                state.episodeDetailsIsPresented = false
-                state.episodeDetails = nil
-                return .none
-
             case .episodeTapped(episode: let episode):
                 return .run { send in
                     do {
                         let episode = try await NetworkService.fetchEpisodeDetails(for: episode)
-                        await send(.episodeLoaded(episode: episode))
+                        await send(.navigateToEpisodeDetails(episode))
                     } catch {
                         if let error = error as? NetworkServiceErrors {
                             await send(.errorOccurred(error))
                         }
                     }
                 }
-
-            case .episodeLoaded(episode: let episode):
-                state.episode = episode
-
-                return .run { send in
-                    await send(.presentEpisodeDetails(isPresented: true))
-                }
+                
+            case .navigateToEpisodeDetails(let episode):
+                state.episodeDetails = .init(episode: episode)
+                return .none
+                
+            case .episodeDetails:
+                return .none
                 
             case .favoriteButtonTapped:
                 let characterID = state.character.id
@@ -123,5 +104,8 @@ struct CharacterDetailsReducer {
             }
         }
         .ifLet(\.$alert, action: \.alert)
+        .ifLet(\.$episodeDetails, action: \.episodeDetails) {
+            EpisodeDetailsReducer()
+        }
     }
 }
